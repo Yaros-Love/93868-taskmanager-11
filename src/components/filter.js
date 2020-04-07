@@ -1,26 +1,22 @@
-const createFilterMarkup = (name, count) => {
+const createFilterMarkup = (filter, isChecked) => {
+  const { name, count } = filter;
   return (
     `<input
         type="radio"
-        id="filter__all"
+        id="filter__${name}"
         class="filter__input visually-hidden"
         name="filter"
-        checked
+        ${isChecked ? `checked` : ``}
       />
-      <label for="filter__all" class="filter__label">
-       ${name} <span class="filter__all-count">${count}</span></label>`
+      <label for="filter__${name}" class="filter__label">
+       ${name} <span class="filter__${name}-count">${count}</span></label>`
   );
 };
 
-export const createFilterTemplate = () => {
-  const filterMarkup = createFilterMarkup(`all`, 42);
+export const createFilterTemplate = (filters) => {
+  const filterMarkup = filters.map((item, i) => createFilterMarkup(item, i === 0)).join(`\n`);
   return (
     `<section class="main__filter filter container">
-      ${filterMarkup}
-      ${filterMarkup}
-      ${filterMarkup}
-      ${filterMarkup}
-      ${filterMarkup}
       ${filterMarkup}
     </section>`
   );
