@@ -1,5 +1,5 @@
-import { DAYS, MONTH_NAMES, COLORS } from '../consts.js';
-import { formatTime } from '../utils.js';
+import {DAYS, MONTH_NAMES, COLORS} from '../consts.js';
+import {formatTime} from '../utils.js';
 
 const createColorsMarkup = (colors, currentColor) => {
   return colors.map((color, index) => {
@@ -37,13 +37,13 @@ const createReapitingDaysMarkup = (days, repeatingDays) => {
       <label class="card__repeat-day" for="repeat-${day}-${index}"
         >${day}</label
       >`
-    )
-  })
+    );
+  });
 
 };
 
 export const createTaskEditTemplate = (task) => {
-  const { description, color, dueDate, repeatingDays } = task;
+  const {description, color, dueDate, repeatingDays} = task;
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
   const isDateShowing = !!dueDate;

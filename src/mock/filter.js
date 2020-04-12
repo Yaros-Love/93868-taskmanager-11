@@ -9,4 +9,4 @@ const generateFilters = () => {
   });
 };
 
-export { generateFilters };
+export {generateFilters};

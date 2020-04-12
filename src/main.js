@@ -1,12 +1,12 @@
 
-import { createBoardTemplate } from "./components/board.js";
-import { createFilterTemplate } from "./components/filter.js";
-import { createLoadMoreButtonTemplate } from "./components/load-more-button.js";
-import { createTaskEditTemplate } from "./components/task-edit.js";
-import { createSiteMenuTemplate } from "./components/site-menu.js";
-import { createTaskTemplate } from "./components/task.js";
-import { generateFilters } from "./mock/filter.js";
-import { generateTasks } from "./mock/task.js"
+import {createBoardTemplate} from "./components/board.js";
+import {createFilterTemplate} from "./components/filter.js";
+import {createLoadMoreButtonTemplate} from "./components/load-more-button.js";
+import {createTaskEditTemplate} from "./components/task-edit.js";
+import {createSiteMenuTemplate} from "./components/site-menu.js";
+import {createTaskTemplate} from "./components/task.js";
+import {generateFilters} from "./mock/filter.js";
+import {generateTasks} from "./mock/task.js";
 
 const TASK_COUNT = 22;
 const SHOWING_TASKS_COUNT_ON_START = 8;

@@ -1,4 +1,4 @@
-import { COLORS } from '../consts.js'
+import {COLORS} from '../consts.js';
 
 const DefaultRepeatingDays = {
   "mo": false,
@@ -60,4 +60,4 @@ const generateTasks = (count) => {
     .map(generateTask);
 };
 
-export { generateTask, generateTasks };
+export {generateTask, generateTasks};
