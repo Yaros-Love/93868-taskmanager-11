@@ -1,7 +1,6 @@
-import createElement from './../utils.js';
+import {createElement} from '../utils.js';
 
-
-const createSortingTemplateElement = () => {
+const createSortTemplate = () => {
   return (`
     <div class="board__filter-list">
         <a href="#" class="board__filter">SORT BY DEFAULT</a>
@@ -11,13 +10,13 @@ const createSortingTemplateElement = () => {
   `);
 };
 
-export default class Sorting {
+export default class Sort {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createSortingTemplateElement();
+    return createSortTemplate();
   }
 
   getElement() {
