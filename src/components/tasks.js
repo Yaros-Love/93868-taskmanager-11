@@ -1,9 +1,7 @@
 import {createElement} from '../utils.js';
 
-const createBoardTemplate = () => {
-  return (
-    `<section class="board container"></section>`
-  );
+const createTasksTemplate = () => {
+  return (`<div class="board__tasks"></div>`);
 };
 
 export default class Board {
@@ -12,7 +10,7 @@ export default class Board {
   }
 
   getTemplate() {
-    return createBoardTemplate();
+    return createTasksTemplate();
   }
 
   getElement() {
@@ -27,3 +25,4 @@ export default class Board {
     this._element = null;
   }
 }
+
