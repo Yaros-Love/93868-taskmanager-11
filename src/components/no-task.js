@@ -1,12 +1,6 @@
 import {createElement} from '../utils.js';
+import {creteNoTaskTemplate} from '../templates/no-task.js';
 
-const creteNoTaskTemplate = () => {
-  return (
-    `<p class="board__no-tasks">
-      Click «ADD NEW TASK» in menu to create your first task
-    </p>`
-  );
-};
 
 export default class NoTask {
   constructor() {

@@ -1,10 +1,6 @@
 import {createElement} from '../utils.js';
+import {createBoardTemplate} from '../templates/board.js';
 
-const createBoardTemplate = () => {
-  return (
-    `<section class="board container"></section>`
-  );
-};
 
 export default class Board {
   constructor() {
