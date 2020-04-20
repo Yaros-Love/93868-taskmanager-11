@@ -1,13 +1,14 @@
 import {createElement} from '../utils.js';
-import {createLoadMoreButtonTemplate} from '../templates/load-more-button.js';
+import {creteNoTaskTemplate} from '../templates/no-task.js';
 
-export default class LoadMoreButton {
+
+export default class NoTask {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createLoadMoreButtonTemplate();
+    return creteNoTaskTemplate();
   }
 
   getElement() {
