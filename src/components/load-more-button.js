@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component.js";
-import {createLoadMoreButtonTemplate} from '../templates/load-more-button.js'
+import {createLoadMoreButtonTemplate} from '../templates/load-more-button.js';
 
 
 export default class LoadMoreButton extends AbstractComponent {
@@ -8,6 +8,6 @@ export default class LoadMoreButton extends AbstractComponent {
   }
 
   setClickHandler(handler) {
-    this.addEventListener(`click`, handler);
+    this.getElement().addEventListener(`click`, handler);
   }
 }

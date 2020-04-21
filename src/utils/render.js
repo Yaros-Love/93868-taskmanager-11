@@ -10,7 +10,7 @@ const createElement = (template) => {
   return newElement.firstChild;
 };
 
-const render = (container, component, place) => {
+const render = (container, component, place = RenderPosition.BEFOREEND) => {
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(component.getElement());
@@ -29,7 +29,7 @@ const replace = (newComponent, oldComponent) => {
   const isExistsElements = !!(parentElement && newElement && oldElement);
 
   if (isExistsElements && parentElement.contains(oldElement)) {
-    parent.replaceChild(newComponent, oldComponent);
+    parentElement.replaceChild(newElement, oldElement);
   }
 };
 
