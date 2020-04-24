@@ -1,5 +1,5 @@
 const createTasksTemplate = () => {
-  return (`<div class="board__tasks"></div>`);
+  return `<div class="board__tasks"></div>`;
 };
 
 export {createTasksTemplate};

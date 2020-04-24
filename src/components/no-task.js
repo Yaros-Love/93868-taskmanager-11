@@ -1,25 +1,9 @@
-import {createElement} from '../utils.js';
 import {creteNoTaskTemplate} from '../templates/no-task.js';
+import AbstractComponent from '../components/abstract-component.js';
 
 
-export default class NoTask {
-  constructor() {
-    this._element = null;
-  }
-
+export default class NoTask extends AbstractComponent {
   getTemplate() {
     return creteNoTaskTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

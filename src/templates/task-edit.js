@@ -1,5 +1,5 @@
 import {DAYS, MONTH_NAMES, COLORS} from '../consts.js';
-import {formatTime} from '../utils.js';
+import {formatTime} from '../utils/common.js';
 
 const createColorsMarkup = (colors, currentColor) => {
   return colors.map((color, index) => {
