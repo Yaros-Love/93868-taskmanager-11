@@ -6,17 +6,13 @@ const createTaskTemplate = (task) => {
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
   const isDateShowing = !!dueDate;
-
   const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
-
   const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;
   const archiveButtonInactiveClass = isArchive ? `` : `card__btn--disabled`;
   const favoriteButtonInactiveClass = isFavorite ? `` : `card__btn--disabled`;
-
-  return (
-    `<article class="card card--${color} ${repeatClass} ${deadlineClass}">
+  return `<article class="card card--${color} ${repeatClass} ${deadlineClass}">
     <div class="card__form">
       <div class="card__inner">
         <div class="card__control">
@@ -33,17 +29,14 @@ const createTaskTemplate = (task) => {
             favorites
           </button>
         </div>
-
         <div class="card__color-bar">
           <svg class="card__color-bar-wave" width="100%" height="10">
             <use xlink:href="#wave"></use>
           </svg>
         </div>
-
         <div class="card__textarea-wrap">
           <p class="card__text">${description}</p>
         </div>
-
         <div class="card__settings">
           <div class="card__details">
             <div class="card__dates">
@@ -58,8 +51,7 @@ const createTaskTemplate = (task) => {
         </div>
       </div>
     </div>
-  </article>`
-  );
+  </article>`;
 };
 
 export {createTaskTemplate};
