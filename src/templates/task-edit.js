@@ -1,6 +1,11 @@
 import {DAYS, MONTH_NAMES, COLORS} from '../consts.js';
 import {formatTime} from '../utils/common.js';
 
+const isRepeating = (repeatingDays) => {
+  return Object.values(repeatingDays).some(Boolean);
+};
+
+
 const createColorsMarkup = (colors, currentColor) => {
   return colors.map((color, index) => {
     return (
@@ -42,21 +47,22 @@ const createReapitingDaysMarkup = (days, repeatingDays) => {
 
 };
 
-const createTaskEditTemplate = (task) => {
-  const {description, color, dueDate, repeatingDays} = task;
+const createTaskEditTemplate = (task, options = {}) => {
+  const {description, color, dueDate} = task;
+  const {isDateShowing, isRepeatingTask, activeRepeatingDays} = options;
 
   const isExpired = dueDate instanceof Date && dueDate < Date.now();
-  const isDateShowing = !!dueDate;
+  const isBlockSaveButton = (isDateShowing && isRepeatingTask) ||
+    (isRepeatingTask && !isRepeating(activeRepeatingDays));
 
-  const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
-  const time = isDateShowing ? formatTime(dueDate) : ``;
+  const date = isDateShowing && dueDate ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
+  const time = isDateShowing && dueDate ? formatTime(dueDate) : ``;
 
-  const isRepeatingTask = Object.values(repeatingDays).some(Boolean);
   const repeatClass = isRepeatingTask ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;
 
   const colorsMarkup = createColorsMarkup(COLORS, color);
-  const repeatingDaysMarkup = createReapitingDaysMarkup(DAYS, repeatingDays);
+  const repeatingDaysMarkup = createReapitingDaysMarkup(DAYS, activeRepeatingDays);
 
   return (
     `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
@@ -121,7 +127,7 @@ const createTaskEditTemplate = (task) => {
                 </div>
 
                 <div class="card__status-btns">
-                  <button class="card__save" type="submit">save</button>
+                  <button class="card__save" type="submit" ${isBlockSaveButton ? `disabled` : ``}>save</button>
                   <button class="card__delete" type="button">delete</button>
                 </div>
               </div>
