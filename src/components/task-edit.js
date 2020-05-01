@@ -1,5 +1,8 @@
 import {createTaskEditTemplate} from '../templates/task-edit.js';
 import AbstractSmartComponent from '../components/abstract-smart-component.js';
+import flatpickr from "flatpickr";
+
+import "flatpickr/dist/flatpickr.min.css";
 
 export default class TaskEdit extends AbstractSmartComponent {
   constructor(task) {
@@ -9,10 +12,27 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
     this._submitHandler = null;
+    this._flatpickr = null;
 
+    this._applyFlatpickr();
     this._subscribeOnEvents();
   }
 
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    if (this._isDateShowing) {
+      const dateElement = this.getElement().querySelector(`.card__date`);
+      this._flatpickr = flatpickr(dateElement, {
+        altInput: true,
+        allowInput: true,
+        defaultDate: this._task.dueDate || `today`,
+      });
+    }
+  }
   getTemplate() {
     return createTaskEditTemplate(this._task, {
       activeRepeatingDays: this._activeRepeatingDays,
