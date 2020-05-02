@@ -1,6 +1,9 @@
 import {createTaskEditTemplate, isAllowableDescriptionLength} from '../templates/task-edit.js';
 import AbstractSmartComponent from '../components/abstract-smart-component.js';
 import {DAYS} from "../consts.js";
+import flatpickr from "flatpickr";
+
+import "flatpickr/dist/flatpickr.min.css";
 
 
 const parseFormData = (formData) => {
@@ -22,6 +25,7 @@ const parseFormData = (formData) => {
   };
 };
 
+
 export default class TaskEdit extends AbstractSmartComponent {
   constructor(task) {
     super();
@@ -32,10 +36,27 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._submitHandler = null;
     this._deleteButtonHandler = null;
     this._currentDescription = task.description;
+    this._flatpickr = null;
 
+    this._applyFlatpickr();
     this._subscribeOnEvents();
   }
 
+  _applyFlatpickr() {
+    if (this._flatpickr) {
+      this._flatpickr.destroy();
+      this._flatpickr = null;
+    }
+
+    if (this._isDateShowing) {
+      const dateElement = this.getElement().querySelector(`.card__date`);
+      this._flatpickr = flatpickr(dateElement, {
+        altInput: true,
+        allowInput: true,
+        defaultDate: this._task.dueDate || `today`,
+      });
+    }
+  }
   getTemplate() {
     return createTaskEditTemplate(this._task, {
       activeRepeatingDays: this._activeRepeatingDays,

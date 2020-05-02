@@ -1,5 +1,4 @@
-import {MONTH_NAMES} from '../consts.js';
-import {formatTime, isOverDueDate} from '../utils/common.js';
+import {formatTime, formatDate, isOverDueDate} from '../utils/common.js';
 
 const createButtonMarkup = (name, isActive = true) => {
   return `<button type="button" class="card__btn card__btn--${name} ${isActive ? `` : `card__btn--disabled`}">
@@ -12,7 +11,7 @@ const createTaskTemplate = (task) => {
 
   const isExpired = dueDate instanceof Date && isOverDueDate(dueDate < Date.now());
   const isDateShowing = !!dueDate;
-  const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
+  const date = isDateShowing ? formatDate(dueDate) : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
   const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;

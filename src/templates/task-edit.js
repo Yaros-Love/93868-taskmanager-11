@@ -1,5 +1,5 @@
-import {DAYS, MONTH_NAMES, COLORS} from '../consts.js';
-import {formatTime, isOverDueDate, isRepeating} from '../utils/common.js';
+import {DAYS, COLORS} from '../consts.js';
+import {formatTime, formatDate, isOverDueDate, isRepeating} from '../utils/common.js';
 import {encode} from 'he';
 
 const MIN_DESCRIPTION_LENGTH = 1;
@@ -62,7 +62,7 @@ const createTaskEditTemplate = (task, options = {}) => {
   const isBlockSaveButton = (isDateShowing && isRepeatingTask) ||
     (isRepeatingTask && !isRepeating(activeRepeatingDays)) || !isAllowableDescriptionLength(description);
 
-  const date = isDateShowing && dueDate ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
+  const date = isDateShowing && dueDate ? formatDate(dueDate) : ``;
   const time = isDateShowing && dueDate ? formatTime(dueDate) : ``;
 
   const repeatClass = isRepeatingTask ? `card--repeat` : ``;
