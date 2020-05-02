@@ -1,5 +1,5 @@
 import {MONTH_NAMES} from '../consts.js';
-import {formatTime} from '../utils/common.js';
+import {formatTime, isOverDueDate} from '../utils/common.js';
 
 const createButtonMarkup = (name, isActive = true) => {
   return `<button type="button" class="card__btn card__btn--${name} ${isActive ? `` : `card__btn--disabled`}">
@@ -10,7 +10,7 @@ const createButtonMarkup = (name, isActive = true) => {
 const createTaskTemplate = (task) => {
   const {dueDate, description, repeatingDays, color} = task;
 
-  const isExpired = dueDate instanceof Date && dueDate < Date.now();
+  const isExpired = dueDate instanceof Date && isOverDueDate(dueDate < Date.now());
   const isDateShowing = !!dueDate;
   const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;

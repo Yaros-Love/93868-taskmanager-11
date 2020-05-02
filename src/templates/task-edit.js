@@ -1,10 +1,9 @@
 import {DAYS, MONTH_NAMES, COLORS} from '../consts.js';
-import {formatTime} from '../utils/common.js';
+import {formatTime, isOverDueDate, isRepeating} from '../utils/common.js';
+import {encode} from 'he';
 
-const isRepeating = (repeatingDays) => {
-  return Object.values(repeatingDays).some(Boolean);
-};
-
+const MIN_DESCRIPTION_LENGTH = 1;
+const MAX_DESCRIPTION_LENGTH = 140;
 
 const createColorsMarkup = (colors, currentColor) => {
   return colors.map((color, index) => {
@@ -27,7 +26,7 @@ const createColorsMarkup = (colors, currentColor) => {
     .join(`\n`);
 };
 
-const createReapitingDaysMarkup = (days, repeatingDays) => {
+const createRepeatingDaysMarkup = (days, repeatingDays) => {
   return days.map((day, index) => {
     const isChecked = repeatingDays[day];
     return (
@@ -44,16 +43,24 @@ const createReapitingDaysMarkup = (days, repeatingDays) => {
       >`
     );
   });
+};
 
+
+const isAllowableDescriptionLength = (description) => {
+  const length = description.length;
+
+  return length >= MIN_DESCRIPTION_LENGTH && length <= MAX_DESCRIPTION_LENGTH;
 };
 
 const createTaskEditTemplate = (task, options = {}) => {
-  const {description, color, dueDate} = task;
-  const {isDateShowing, isRepeatingTask, activeRepeatingDays} = options;
+  const {color, dueDate} = task;
+  const {isDateShowing, isRepeatingTask, activeRepeatingDays, currentDescription} = options;
 
-  const isExpired = dueDate instanceof Date && dueDate < Date.now();
+  const description = encode(currentDescription);
+
+  const isExpired = dueDate instanceof Date && isOverDueDate(dueDate < Date.now());
   const isBlockSaveButton = (isDateShowing && isRepeatingTask) ||
-    (isRepeatingTask && !isRepeating(activeRepeatingDays));
+    (isRepeatingTask && !isRepeating(activeRepeatingDays)) || !isAllowableDescriptionLength(description);
 
   const date = isDateShowing && dueDate ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
   const time = isDateShowing && dueDate ? formatTime(dueDate) : ``;
@@ -62,7 +69,7 @@ const createTaskEditTemplate = (task, options = {}) => {
   const deadlineClass = isExpired ? `card--deadline` : ``;
 
   const colorsMarkup = createColorsMarkup(COLORS, color);
-  const repeatingDaysMarkup = createReapitingDaysMarkup(DAYS, activeRepeatingDays);
+  const repeatingDaysMarkup = createRepeatingDaysMarkup(DAYS, activeRepeatingDays);
 
   return (
     `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
@@ -136,4 +143,4 @@ const createTaskEditTemplate = (task, options = {}) => {
   );
 };
 
-export {createTaskEditTemplate};
+export {createTaskEditTemplate, isAllowableDescriptionLength};
