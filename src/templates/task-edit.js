@@ -1,5 +1,5 @@
-import {DAYS, MONTH_NAMES, COLORS} from '../consts.js';
-import {formatTime} from '../utils/common.js';
+import {DAYS, COLORS} from '../consts.js';
+import {formatTime, formatDate} from '../utils/common.js';
 
 const isRepeating = (repeatingDays) => {
   return Object.values(repeatingDays).some(Boolean);
@@ -55,7 +55,7 @@ const createTaskEditTemplate = (task, options = {}) => {
   const isBlockSaveButton = (isDateShowing && isRepeatingTask) ||
     (isRepeatingTask && !isRepeating(activeRepeatingDays));
 
-  const date = isDateShowing && dueDate ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
+  const date = isDateShowing && dueDate ? formatDate(dueDate) : ``;
   const time = isDateShowing && dueDate ? formatTime(dueDate) : ``;
 
   const repeatClass = isRepeatingTask ? `card--repeat` : ``;
