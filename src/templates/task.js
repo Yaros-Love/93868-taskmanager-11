@@ -1,4 +1,4 @@
-import {formatTime, formatDate} from '../utils/common.js';
+import {formatTime, formatDate, isOverDueDate} from '../utils/common.js';
 
 const createButtonMarkup = (name, isActive = true) => {
   return `<button type="button" class="card__btn card__btn--${name} ${isActive ? `` : `card__btn--disabled`}">
@@ -9,7 +9,7 @@ const createButtonMarkup = (name, isActive = true) => {
 const createTaskTemplate = (task) => {
   const {dueDate, description, repeatingDays, color} = task;
 
-  const isExpired = dueDate instanceof Date && dueDate < Date.now();
+  const isExpired = dueDate instanceof Date && isOverDueDate(dueDate < Date.now());
   const isDateShowing = !!dueDate;
   const date = isDateShowing ? formatDate(dueDate) : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
