@@ -120,6 +120,7 @@ export default class BoardController {
 
     const sortedTasks = getSortedTasks(tasks, this._sortComponent.getSortType(), prevTasksCount, this._showingTasksCount);
     this._renderTasks(sortedTasks);
+    console.log(this._showingTasksCount, sortedTasks.length);
 
     if (this._showingTasksCount >= sortedTasks.length) {
       remove(this._loadMoreButtonComponent);
@@ -177,6 +178,7 @@ export default class BoardController {
   _onViewChange() {
     this._showedTaskControllers.forEach((it) => it.setDefaultView());
   }
+
   _onSortTypeChange(sortType) {
     this._showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
 
@@ -186,6 +188,14 @@ export default class BoardController {
     this._renderTasks(sortedTasks);
 
     this._renderLoadMoreButton();
+  }
+
+  hide() {
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
   }
 }
 
