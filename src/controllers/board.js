@@ -177,6 +177,7 @@ export default class BoardController {
   _onViewChange() {
     this._showedTaskControllers.forEach((it) => it.setDefaultView());
   }
+
   _onSortTypeChange(sortType) {
     this._showingTasksCount = SHOWING_TASKS_COUNT_ON_START;
 
@@ -186,6 +187,14 @@ export default class BoardController {
     this._renderTasks(sortedTasks);
 
     this._renderLoadMoreButton();
+  }
+
+  hide() {
+    this._container.hide();
+  }
+
+  show() {
+    this._container.show();
   }
 }
 
