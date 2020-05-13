@@ -1,12 +1,7 @@
 import {createTaskEditTemplate, isAllowableDescriptionLength} from '../templates/task-edit.js';
 import AbstractSmartComponent from '../components/abstract-smart-component.js';
-import {DAYS} from "../consts.js";
 import flatpickr from "flatpickr";
-
 import "flatpickr/dist/flatpickr.min.css";
-
-
-
 
 
 export default class TaskEdit extends AbstractSmartComponent {
@@ -81,9 +76,8 @@ export default class TaskEdit extends AbstractSmartComponent {
 
   getData() {
     const form = this.getElement().querySelector(`.card__form`);
-    const formData = new FormData(form);
 
-    return parseFormData(formData);
+    return new FormData(form);
   }
 
   setSubmitHandler(handler) {

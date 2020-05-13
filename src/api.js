@@ -1,4 +1,5 @@
 import Task from './models/task.js';
+
 const Method = {
   GET: `GET`,
   POST: `POST`,
@@ -15,30 +16,45 @@ const checkStatus = (response) => {
 };
 
 const API = class {
-  constructor(authorization) {
+  constructor(endPoint, authorization) {
     this._authorization = authorization;
+    this._endPoint = endPoint;
   }
   getTasks() {
-    const headers = new Headers();
-    headers.append(`Authorization`, this._authorization);
-
-    return fetch(`https://11.ecmascript.pages.academy/task-manager/tasks`, {headers})
-      .then(checkStatus)
+    return this._load({url: `tasks`})
       .then((response) => response.json())
       .then(Task.parseTask)
   }
 
   updateTask(id, data) {
-    const headers = new Headers();
-    headers.append(`Authorization`, this._authorization);
-    headers.append(`Content-Type`, `application/json`);
-
-    return fetch(`https://11.ecmascript.pages.academy/task-manager/tasks/${id}`, {
+    return this._load({
+      url: `tasks/${id}`,
       method: `PUT`,
       body: JSON.stringify(data.toRAW()),
-      headers,
+      headers: new Headers({"Content-Type": `application/json`}),
     })
       .then(checkStatus)
+      .then((response) => response.json())
+      .then(Task.parseTask)
+  }
+
+  _load ({url, method = Method.GET, body = null, headers = new Headers()}) {
+    headers.append(`Authorization`, this._authorization);
+
+    return fetch(`${this._endPoint}/${url}`, {method, body, headers})
+      .then(checkStatus)
+      .catch((err) => {
+        throw err;
+      });
+  }
+
+  createTask(task) {
+    return this._load({
+      url: `tasks`,
+      method: Method.POST,
+      body: JSON.stringify(task.toRAW()),
+      headers: new Headers({"Content-Type": `application/json`}),
+    })
       .then((response) => response.json())
       .then(Task.parseTask)
   }

@@ -10,6 +10,7 @@ import TasksModel from "./models/tasks.js";
 
 // const TASK_COUNT = 55;
 const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo`;
+const END_POINT = `https://11.ecmascript.pages.academy/task-manager`;
 
 const dateTo = new Date();
 const dateFrom = (() => {
@@ -18,7 +19,7 @@ const dateFrom = (() => {
   return d;
 })();
 
-const api = new API(AUTHORIZATION);
+const api = new API(END_POINT, AUTHORIZATION);
 const tasksModel = new TasksModel();
 
 const siteMainElement = document.querySelector(`.main`);
@@ -60,6 +61,8 @@ siteMenuComponent.setOnChange((menuItem) => {
 
 api.getTasks()
   .then((tasks) => {
+    console.log(tasks)
     tasksModel.setTasks(tasks);
     boardController.render();
   })
+
