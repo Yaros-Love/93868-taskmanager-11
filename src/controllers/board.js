@@ -66,6 +66,7 @@ export default class BoardController {
   render() {
     const container = this._container.getElement();
     const tasks = this._tasksModel.getTasks();
+    console.log(tasks)
     const isAllTasksArchived = tasks.every((task) => task.isArchive);
 
     if (isAllTasksArchived) {
@@ -144,6 +145,9 @@ export default class BoardController {
           .then((taskModel) => {
             this._tasksModel.addTask(taskModel);
             taskController.render(taskModel, TaskControllerMode.DEFAULT);
+          })
+          .catch(() => {
+            taskController.shake();
           });
 
         if (this._showingTasksCount % SHOWING_TASKS_COUNT_BY_BUTTON === 0) {
@@ -157,8 +161,14 @@ export default class BoardController {
         this._renderLoadMoreButton();
       }
     } else if (newData === null) {
-      this._tasksModel.removeTask(oldData.id);
-      this._updateTasks(this._showingTasksCount);
+      this._api.deleteTask(oldData.id)
+        .then(() => {
+          this._tasksModel.removeTask(oldData.id);
+          this._updateTasks(this._showingTasksCount);
+        })
+        .catch(() => {
+          taskController.shake();
+        });
     } else {
       this._api.updateTask(oldData.id, newData)
         .then((taskModel) => {
@@ -168,7 +178,10 @@ export default class BoardController {
             taskController.render(taskModel, TaskControllerMode.DEFAULT);
             this._updateTasks(this._showingTasksCount);
           }
-        });
+        })
+        .catch(() => {
+        taskController.shake();
+      });
     }
   }
 

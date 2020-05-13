@@ -54,7 +54,7 @@ const isAllowableDescriptionLength = (description) => {
 
 const createTaskEditTemplate = (task, options = {}) => {
   const {color, dueDate} = task;
-  const {isDateShowing, isRepeatingTask, activeRepeatingDays, currentDescription} = options;
+  const {isDateShowing, isRepeatingTask, activeRepeatingDays, currentDescription, externalData} = options;
 
   const description = encode(currentDescription);
 
@@ -70,6 +70,9 @@ const createTaskEditTemplate = (task, options = {}) => {
 
   const colorsMarkup = createColorsMarkup(COLORS, color);
   const repeatingDaysMarkup = createRepeatingDaysMarkup(DAYS, activeRepeatingDays);
+
+  const deleteButtonText = externalData.deleteButtonText;
+  const saveButtonText = externalData.saveButtonText;
 
   return (
     `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
@@ -134,8 +137,8 @@ const createTaskEditTemplate = (task, options = {}) => {
                 </div>
 
                 <div class="card__status-btns">
-                  <button class="card__save" type="submit" ${isBlockSaveButton ? `disabled` : ``}>save</button>
-                  <button class="card__delete" type="button">delete</button>
+                  <button class="card__save" type="submit" ${isBlockSaveButton ? `disabled` : ``}>${saveButtonText}</button>
+                  <button class="card__delete" type="button">${deleteButtonText}</button>
                 </div>
               </div>
             </form>

@@ -58,6 +58,10 @@ const API = class {
       .then((response) => response.json())
       .then(Task.parseTask)
   }
+
+  deleteTask(id) {
+    return this._load({url: `{tasks/${id}}`, method: Method.DELETE});
+  }
 };
 
 export default API;

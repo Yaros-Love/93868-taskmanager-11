@@ -9,7 +9,7 @@ import BoardController from "./controllers/board.js";
 import TasksModel from "./models/tasks.js";
 
 // const TASK_COUNT = 55;
-const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo`;
+const AUTHORIZATION = `Basic dXNlck786gffytfyg`;
 const END_POINT = `https://11.ecmascript.pages.academy/task-manager`;
 
 const dateTo = new Date();
@@ -65,4 +65,5 @@ api.getTasks()
     tasksModel.setTasks(tasks);
     boardController.render();
   })
+
 

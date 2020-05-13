@@ -4,6 +4,12 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
 
+const DefaultData = {
+  deleteButtonText: `Delete`,
+  saveButtonText: `Save`,
+};
+
+
 export default class TaskEdit extends AbstractSmartComponent {
   constructor(task) {
     super();
@@ -12,6 +18,7 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
     this._submitHandler = null;
+    this._externalData = DefaultData;
     this._deleteButtonHandler = null;
     this._currentDescription = task.description;
     this._flatpickr = null;
@@ -41,6 +48,7 @@ export default class TaskEdit extends AbstractSmartComponent {
       isDateShowing: this._isDateShowing,
       isRepeatingTask: this._isRepeatingTask,
       currentDescription: this._currentDescription,
+      externalData: this._externalData,
     });
   }
 
@@ -78,6 +86,11 @@ export default class TaskEdit extends AbstractSmartComponent {
     const form = this.getElement().querySelector(`.card__form`);
 
     return new FormData(form);
+  }
+
+  setData(data) {
+    this._externalData = Object.assign({}, DefaultData, data);
+    this.rerender();
   }
 
   setSubmitHandler(handler) {
