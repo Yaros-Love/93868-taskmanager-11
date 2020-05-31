@@ -5,7 +5,7 @@ import SiteMenuComponent, {MenuItem} from "./components/site-menu.js";
 import StatisticsComponent from "./components/statistics";
 // import {generateTasks} from "./mock/task.js";
 import {render, RenderPosition} from "./utils/render.js";
-import BoardController from "./controllers/board.js";
+import BoardController from "./controllers/board-controller.js";
 import TasksModel from "./models/tasks.js";
 
 // const TASK_COUNT = 55;

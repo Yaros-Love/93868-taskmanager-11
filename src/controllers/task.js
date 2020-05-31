@@ -1,19 +1,18 @@
 import TaskComponent from "../components/task.js";
 import TaskEditComponent from "../components/task-edit.js";
+import TaskModel from "../models/task.js";
 import {render, replace, remove, RenderPosition} from "../utils/render.js";
-import {COLOR} from '../consts.js';
-import {DAYS} from "../consts";
-import TaskModel from "../models/task";
+import {COLOR, DAYS} from "../consts.js";
 
 const SHAKE_ANIMATION_TIMEOUT = 600;
 
-const Mode = {
+export const Mode = {
   ADDING: `adding`,
   DEFAULT: `default`,
   EDIT: `edit`,
 };
 
-const EmptyTask = {
+export const EmptyTask = {
   description: ``,
   dueDate: null,
   repeatingDays: {
@@ -31,26 +30,25 @@ const EmptyTask = {
 };
 
 const parseFormData = (formData) => {
+  const date = formData.get(`date`);
   const repeatingDays = DAYS.reduce((acc, day) => {
     acc[day] = false;
     return acc;
   }, {});
 
-  const date = formData.get(`date`);
-
   return new TaskModel({
     "description": formData.get(`text`),
-    "color": formData.get(`color`),
-    "dueDate": date ? new Date(date) : null,
-    "repeatingDays": formData.getAll(`repeat`).reduce((acc, item) => {
-      acc[item] = true;
+    "due_date": date ? new Date(date) : null,
+    "repeating_days": formData.getAll(`repeat`).reduce((acc, it) => {
+      acc[it] = true;
       return acc;
     }, repeatingDays),
+    "color": formData.get(`color`),
     "is_favorite": false,
     "is_done": false,
-
   });
 };
+
 
 export default class TaskController {
   constructor(container, onDataChange, onViewChange) {
@@ -103,7 +101,6 @@ export default class TaskController {
 
       this._onDataChange(this, task, data);
     });
-
     this._taskEditComponent.setDeleteButtonClickHandler(() => {
       this._taskEditComponent.setData({
         deleteButtonText: `Deleting...`,
@@ -119,7 +116,7 @@ export default class TaskController {
           replace(this._taskEditComponent, oldTaskEditComponent);
           this._replaceEditToTask();
         } else {
-          render(this._container, this._taskComponent);
+          render(this._container, this._taskComponent, RenderPosition.BEFOREEND);
         }
         break;
       case Mode.ADDING:
@@ -140,8 +137,8 @@ export default class TaskController {
   }
 
   destroy() {
-    remove(this._taskComponent);
     remove(this._taskEditComponent);
+    remove(this._taskComponent);
     document.removeEventListener(`keydown`, this._onEscKeyDown);
   }
 
@@ -159,7 +156,6 @@ export default class TaskController {
       });
     }, SHAKE_ANIMATION_TIMEOUT);
   }
-
 
   _replaceEditToTask() {
     document.removeEventListener(`keydown`, this._onEscKeyDown);
@@ -185,12 +181,8 @@ export default class TaskController {
       if (this._mode === Mode.ADDING) {
         this._onDataChange(this, EmptyTask, null);
       }
-
       this._replaceEditToTask();
       document.removeEventListener(`keydown`, this._onEscKeyDown);
     }
   }
 }
-
-
-export {Mode, EmptyTask};

@@ -23,17 +23,16 @@ const API = class {
   getTasks() {
     return this._load({url: `tasks`})
       .then((response) => response.json())
-      .then(Task.parseTask)
+      .then(Task.parseTasks)
   }
 
   updateTask(id, data) {
     return this._load({
       url: `tasks/${id}`,
-      method: `PUT`,
+      method: Method.PUT,
       body: JSON.stringify(data.toRAW()),
       headers: new Headers({"Content-Type": `application/json`}),
     })
-      .then(checkStatus)
       .then((response) => response.json())
       .then(Task.parseTask)
   }

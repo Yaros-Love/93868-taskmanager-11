@@ -66,7 +66,6 @@ export default class BoardController {
   render() {
     const container = this._container.getElement();
     const tasks = this._tasksModel.getTasks();
-    console.log(tasks)
     const isAllTasksArchived = tasks.every((task) => task.isArchive);
 
     if (isAllTasksArchived) {
@@ -180,8 +179,8 @@ export default class BoardController {
           }
         })
         .catch(() => {
-        taskController.shake();
-      });
+          taskController.shake();
+        });
     }
   }
 
