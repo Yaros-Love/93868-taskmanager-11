@@ -1,28 +1,12 @@
 import {createTaskEditTemplate, isAllowableDescriptionLength} from '../templates/task-edit.js';
 import AbstractSmartComponent from '../components/abstract-smart-component.js';
-import {DAYS} from "../consts.js";
 import flatpickr from "flatpickr";
-
 import "flatpickr/dist/flatpickr.min.css";
 
 
-const parseFormData = (formData) => {
-  const repeatingDays = DAYS.reduce((acc, day) => {
-    acc[day] = false;
-    return acc;
-  }, {});
-
-  const date = formData.get(`date`);
-
-  return {
-    description: formData.get(`text`),
-    color: formData.get(`color`),
-    dueDate: date ? new Date(date) : null,
-    repeatingDays: formData.getAll(`repeat`).reduce((acc, item) => {
-      acc[item] = true;
-      return acc;
-    }, repeatingDays)
-  };
+const DefaultData = {
+  deleteButtonText: `Delete`,
+  saveButtonText: `Save`,
 };
 
 
@@ -34,6 +18,7 @@ export default class TaskEdit extends AbstractSmartComponent {
     this._isRepeatingTask = Object.values(task.repeatingDays).some(Boolean);
     this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
     this._submitHandler = null;
+    this._externalData = DefaultData;
     this._deleteButtonHandler = null;
     this._currentDescription = task.description;
     this._flatpickr = null;
@@ -63,6 +48,7 @@ export default class TaskEdit extends AbstractSmartComponent {
       isDateShowing: this._isDateShowing,
       isRepeatingTask: this._isRepeatingTask,
       currentDescription: this._currentDescription,
+      externalData: this._externalData,
     });
   }
 
@@ -98,9 +84,13 @@ export default class TaskEdit extends AbstractSmartComponent {
 
   getData() {
     const form = this.getElement().querySelector(`.card__form`);
-    const formData = new FormData(form);
 
-    return parseFormData(formData);
+    return new FormData(form);
+  }
+
+  setData(data) {
+    this._externalData = Object.assign({}, DefaultData, data);
+    this.rerender();
   }
 
   setSubmitHandler(handler) {
