@@ -17,7 +17,7 @@ const dateFrom = (() => {
   return d;
 })();
 
-const api = new API(END_POINT, AUTHORIZATION);
+const apiNewApi = new API(END_POINT, AUTHORIZATION);
 const tasksModel = new TasksModel();
 
 const siteMainElement = document.querySelector(`.main`);
