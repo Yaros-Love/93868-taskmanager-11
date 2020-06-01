@@ -3,12 +3,12 @@ import BoardComponent from "./components/board.js";
 import FilterController from "./controllers/filter.js";
 import SiteMenuComponent, {MenuItem} from "./components/site-menu.js";
 import StatisticsComponent from "./components/statistics";
-// import {generateTasks} from "./mock/task.js";
+import {generateTasks} from "./mock/task.js";
 import {render, RenderPosition} from "./utils/render.js";
 import BoardController from "./controllers/board-controller.js";
 import TasksModel from "./models/tasks.js";
 
-// const TASK_COUNT = 55;
+const TASK_COUNT = 55;
 const AUTHORIZATION = `Basic dXNlck786gffytfyg`;
 const END_POINT = `https://11.ecmascript.pages.academy/task-manager`;
 
