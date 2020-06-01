@@ -18,7 +18,7 @@ const getUniqItems = (item, index, array) => {
 };
 
 const getTasksByDateRange = (tasks, dateFrom, dateTo) => {
-  return tasks.filter((task) => {
+  return tasks.filter((task, ind) => {
     const dueDate = task.dueDate;
 
     return dueDate >= dateFrom && dueDate <= dateTo;
