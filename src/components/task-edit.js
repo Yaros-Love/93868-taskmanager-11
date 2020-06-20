@@ -42,6 +42,7 @@ export default class TaskEdit extends AbstractSmartComponent {
       });
     }
   }
+
   getTemplate() {
     return createTaskEditTemplate(this._task, {
       activeRepeatingDays: this._activeRepeatingDays,
@@ -63,7 +64,7 @@ export default class TaskEdit extends AbstractSmartComponent {
 
   recoveryListeners() {
     this.setSubmitHandler(this._submitHandler);
-    this.setDeleteButtonClickHandler(this._deleteButtonClickHandler);
+    this.setDeleteButtonClickHandler(this._deleteButtonHandler);
     this._subscribeOnEvents();
   }
 

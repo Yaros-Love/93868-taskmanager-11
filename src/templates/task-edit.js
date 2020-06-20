@@ -33,9 +33,9 @@ const createRepeatingDaysMarkup = (days, repeatingDays) => {
       `<input
         class="visually-hidden card__repeat-day-input"
         type="checkbox"
-        id="repeat-mo-4"
+        id="repeat-${day}-${index}"
         name="repeat"
-        value="mo"
+        value="${day}"
         ${isChecked ? `checked` : ``}
       />
       <label class="card__repeat-day" for="repeat-${day}-${index}"
