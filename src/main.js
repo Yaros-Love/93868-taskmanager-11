@@ -66,7 +66,6 @@ siteMenuComponent.setOnChange((menuItem) => {
 
 apiWithProvider.getTasks()
   .then((tasks) => {
-    console.log(tasks)
     tasksModel.setTasks(tasks);
     boardController.render();
   })
