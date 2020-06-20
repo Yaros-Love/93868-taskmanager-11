@@ -20,6 +20,17 @@ const API = class {
     this._authorization = authorization;
     this._endPoint = endPoint;
   }
+
+  sync(data) {
+    return this._load({
+      url: `tasks/sync`,
+      method: Method.POST,
+      body: JSON.stringify(data),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then((response) => response.json());
+  }
+
   getTasks() {
     return this._load({url: `tasks`})
       .then((response) => response.json())
