@@ -7,9 +7,13 @@ import StatisticsComponent from "./components/statistics";
 import {render, RenderPosition} from "./utils/render.js";
 import BoardController from "./controllers/board-controller.js";
 import TasksModel from "./models/tasks.js";
+import Store from "./api/store";
 
 const AUTHORIZATION = `Basic dXNlck786gffytfyg`;
 const END_POINT = `https://11.ecmascript.pages.academy/task-manager`;
+const STORE_PREFIX = `taskmanager-localstorage`;
+const STORE_VER = `v1`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 const dateTo = new Date();
 const dateFrom = (() => {
@@ -19,7 +23,8 @@ const dateFrom = (() => {
 })();
 
 const api = new API(END_POINT, AUTHORIZATION);
-const apiWithProvider = new Provider(api);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 const tasksModel = new TasksModel();
 
 const siteMainElement = document.querySelector(`.main`);
