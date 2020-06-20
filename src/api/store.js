@@ -3,6 +3,7 @@ export default class Store {
     this._storage = storage;
     this._storeKey = key;
   }
+
   getItems() {
     try {
       return JSON.parse(this._storage.getItem(this._storeKey)) || {};
@@ -25,6 +26,13 @@ export default class Store {
   }
 
   removeItem(key) {
+    const store = this.getItems();
 
+    delete store[key];
+    this._storage.setItem(
+      this._storeKey,
+      JSON.stringify(store)
+    );
   }
 }
+
