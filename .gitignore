@@ -7,3 +7,5 @@
 *.woff binary
 *.woff2 binary
 node_modules
+/public/bundle.js
+/public/bundle.js.map
