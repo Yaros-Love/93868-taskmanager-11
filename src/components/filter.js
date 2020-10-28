@@ -1,5 +1,5 @@
 const createFilterMarkup = (filter, isChecked) => {
-const {name, count} = filter;
+  const {name, count} = filter;
 
   return (
     `<input
@@ -16,7 +16,7 @@ const {name, count} = filter;
 };
 
 const createFilterTemplate = (filters) => {
-const filtersMarkup = filters.map((it, i) => createFilterMarkup(it, i === 0)).join(``)
+  const filtersMarkup = filters.map((it, i) => createFilterMarkup(it, i === 0)).join(``);
   return (
     `<section class="main__filter filter container">
     ${filtersMarkup}

@@ -34,10 +34,10 @@ const generateRepeatingDays = () => {
 };
 
 const generateTask = () => {
-const dueDate = Math.random() > 0.5 ? null : getRandomDate();
+  const dueDate = Math.random() > 0.5 ? null : getRandomDate();
 
   return {
-    description: `Example default task with default color.`,
+    description: getRandomArrayItem(DescriptionItems),
     dueDate,
     repeatingDays: dueDate ? DefaultRepeatingDays : generateRepeatingDays(),
     color: getRandomArrayItem(COLORS),
