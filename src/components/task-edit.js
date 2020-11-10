@@ -1,135 +1,159 @@
-import {COLORS, DAYS, MONTH_NAMES} from '../const.js';
-import {formatTime} from '../util.js';
+import {COLORS} from '../const.js';
+import {formatTime, createElement, humanizeTaskDueDate, isTaskRepeating, isTaskExpired} from '../util.js';
 
-const createColorsMarkup = (colors, currentColor) => {
-  return colors
-    .map((color, index) => {
-      return (
-        `<input
-      type="radio"
-      id="color-${color}-${index}"
+const BLANK_TASK = {
+  color: COLORS[0],
+  description: ``,
+  dueDate: null,
+  repeating: {
+    mo: false,
+    tu: false,
+    we: false,
+    th: false,
+    fr: false,
+    sa: false,
+    su: false,
+  },
+  isArchive: false,
+  isFavorite: false,
+};
+
+const createTaskEditDateTemplate = (dueDate) => {
+  return `<button class="card__date-deadline-toggle" type="button">
+    date: <span class="card__date-status">${dueDate !== null ? `yes` : `no`}</span>
+    </button>
+
+    ${dueDate !== null ? `<fieldset class="card__date-deadline">
+      <label class="card__input-deadline-wrap">
+      <input
+        class="card__date"
+        type="text"
+        placeholder=""
+        name="date"
+        value="${humanizeTaskDueDate(dueDate)}"
+      />
+    </label>
+  </fieldset>` : ``}`;
+};
+
+const createTaskEditColorsTemplate = (currentColor) => {
+  return COLORS
+    .map((color) => `<input
+      type = "radio"
+      id = "color-${color}"
       class="card__color-input card__color-input--${color} visually-hidden"
-      name="color"
-      value="${color}"
+      name = "color"
+      value = "${color}"
       ${currentColor === color ? `checked` : ``}
-    />
-    <label
-      for="color-${color}-${index}"
-      class="card__color card__color--${color}"
-      >black</label
-    >`
-      );
-    }).join(`\n`);
+      />
+      <label
+      for= "color-${color}"
+      class= "card__color card__color--${color}"
+      >${color}</label>`)
+      .join(``);
 };
 
-const createRepeatingDaysMarkup = (days, repeatingDays) => {
-  return days
-    .map((day, index) => {
-      const IsChecked = repeatingDays[day];
-      return (
-        `<input
-  class="visually-hidden card__repeat-day-input"
-  type="checkbox"
-  id="repeat-${day}-${index}"
-  name="repeat"
-  value="${day}"
-  ${IsChecked ? `checked` : ``}
-/>
-<label class="card__repeat-day" for="repeat-${day}-${index}"
-  >${day}</label
->`
-      );
-    }).join(`\n`);
+const createTaskEditRepeatingTemplate = (repeating) => {
+  return `<button class="card__repeat-toggle" type = "button">
+    repeat: <span class="card__repeat-status">${isTaskRepeating(repeating) ? `yes` : `no`}</span>
+  </button>
+
+  ${isTaskRepeating(repeating) ? `<fieldset class="card__repeat-days">
+    <div class="card__repeat-days-inner">
+      ${Object.entries(repeating).map(([day, repeat]) => `<input
+      class="visually-hidden card__repeat-day-input"
+      type="checkbox"
+      id="repeat-${day}"
+      name="repeat"
+      value="${day}"
+      ${repeat ? `checked` : ``}
+    />
+    <label class="card__repeat-day" for="repeat-${day}"
+    >${day}</label>`).join(``)}
+</div>
+</fieldset>` : ``}`;
 };
+
 
 const createTaskEditTemplate = (task) => {
   const {description, dueDate, color, repeatingDays} = task;
 
-  const isExpired = dueDate instanceof Date && dueDate < Date.now();
-  const isDateShowing = !!dueDate;
+  // const isExpired = dueDate instanceof Date && dueDate < Date.now();
 
-  const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
-  const time = isDateShowing ? `${formatTime(dueDate)}` : ``;
+  // const isDateShowing = !!dueDate;
+  // const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]} ` : ``;
+  // const time = isDateShowing ? `${formatTime(dueDate)} ` : ``;
 
-  const isRepeatingTask = Object.values(repeatingDays).some(Boolean);
-  const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
-  const deadlineClass = isExpired ? `card--deadline` : ``;
+  const dateTemplate = createTaskEditDateTemplate(dueDate);
+  const repeatingTemplate = createTaskEditRepeatingTemplate(repeatingDays);
+  const colorsTemplate = createTaskEditColorsTemplate(color);
+  const repeatClassName = isTaskRepeating(repeatingDays) ? `card--repeat` : ``;
+  const deadlineClassName = isTaskExpired(dueDate) ? `card--deadline` : ``;
 
-  const colorsMarkup = createColorsMarkup(COLORS, color);
-  const repeatingDaysMarkup = createRepeatingDaysMarkup(DAYS, repeatingDays);
-
-  return (
-    `<article class="card card--edit card--${color} ${repeatClass} ${deadlineClass}">
-    <form class="card__form" method="get">
-      <div class="card__inner">
-        <div class="card__color-bar">
-          <svg class="card__color-bar-wave" width="100%" height="10">
-            <use xlink:href="#wave"></use>
+  return `<article article class="card card--edit card--${color} ${repeatClassName} ${deadlineClassName}" >
+  <form class="card__form" method="get">
+    <div class="card__inner">
+      <div class="card__color-bar">
+        <svg class="card__color-bar-wave" width="100%" height="10">
+          <use xlink:href="#wave"></use>
           </svg>
-        </div>
+    </div>
 
-        <div class="card__textarea-wrap">
-          <label>
-            <textarea
-              class="card__text"
-              placeholder="Start typing your text here..."
-              name="text"
-            >${description}</textarea>
-          </label>
-        </div>
+    <div class="card__textarea-wrap">
+      <label>
+        <textarea
+          class="card__text"
+          placeholder="Start typing your text here..."
+          name="text"
+        >${description}</textarea>
+      </label>
+    </div>
 
-        <div class="card__settings">
-          <div class="card__details">
-            <div class="card__dates">
-              <button class="card__date-deadline-toggle" type="button">
-                date: <span class="card__date-status">${isDateShowing ? `yes` : `no`}</span>
-              </button>
-          ${isDateShowing ?
-      `<fieldset class="card__date-deadline">
-            <label class="card__input-deadline-wrap">
-              <input
-                class="card__date"
-                type="text"
-                placeholder=""
-                name="date"
-                value="${date} ${time}"
-              />
-            </label>
-          </fieldset>`
-      : ``
-    }
+    <div class="card__settings">
+      <div class="card__details">
+        <div class="card__dates">
 
-              <button class="card__repeat-toggle" type="button">
-                repeat:<span class="card__repeat-status">${isRepeatingTask ? `yes` : `no`}</span>
-              </button>
-${isRepeatingTask ?
-      `<fieldset class="card__repeat-days">
-  <div class="card__repeat-days-inner">
-  ${repeatingDaysMarkup}
-  </div>
-</fieldset>`
-      : ``
-    }
+          ${dateTemplate}
+          ${repeatingTemplate}
 
-            </div>
-          </div>
-
-          <div class="card__colors-inner">
-            <h3 class="card__colors-title">Color</h3>
-            <div class="card__colors-wrap">
-            ${colorsMarkup}
-            </div>
-          </div>
-        </div>
-
-        <div class="card__status-btns">
-          <button class="card__save" type="submit">save</button>
-          <button class="card__delete" type="button">delete</button>
         </div>
       </div>
-    </form>
-  </article>`
-  );
+
+      <div class="card__colors-inner">
+        <h3 class="card__colors-title">Color</h3>
+        <div class="card__colors-wrap">
+          ${colorsTemplate}
+        </div>
+      </div>
+    </div>
+
+    <div class="card__status-btns">
+      <button class="card__save" type="submit">save</button>
+      <button class="card__delete" type="button">delete</button>
+    </div>
+      </div>
+    </form >
+  </article>`;
 };
 
-export {createTaskEditTemplate};
+export default class TaskEdit {
+  constructor(task) {
+    this._task = task || BLANK_TASK;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTaskEditTemplate(this._task);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

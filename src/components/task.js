@@ -1,34 +1,28 @@
-import {MONTH_NAMES} from '../const.js';
-import {formatTime} from '../util.js';
+import {isTaskExpired, isTaskRepeating, humanizeTaskDueDate, createElement} from '../util.js';
 
 const createTaskTemplate = (task) => {
   const {description, dueDate, color, repeatingDays, isArchive, isFavorite} = task;
 
-  const isExpired = dueDate instanceof Date && dueDate < Date.now();
-  const isDateShowing = !!dueDate;
-
-  const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]}` : ``;
-  const time = isDateShowing ? formatTime(dueDate) : ``;
-
-  const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
-  const deadlineClass = isExpired ? `card--deadline` : ``;
-  const archiveButtonInactiveClass = isArchive ? `` : `card__btn--disabled`;
-  const favoriteButtonInactiveClass = isFavorite ? `` : `card__btn--disabled`;
+  const date = dueDate !== null ? humanizeTaskDueDate(dueDate) : ``;
+  const repeatClassName = isTaskRepeating(repeatingDays) ? `card--repeat` : ``;
+  const deadlineClassName = isTaskExpired(dueDate) ? `card--deadline` : ``;
+  const archiveClassName = isArchive ? `` : `card__btn--disabled`;
+  const favoriteClassName = isFavorite ? `` : `card__btn--disabled`;
 
   return (
-    `<article class="card card--${color} ${repeatClass} ${deadlineClass}">
+    `<article class="card card--${color} ${repeatClassName} ${deadlineClassName}">
     <div class="card__form">
       <div class="card__inner">
         <div class="card__control">
           <button type="button" class="card__btn card__btn--edit">
             edit
           </button>
-          <button type="button" class="card__btn card__btn--archive ${archiveButtonInactiveClass}">
+          <button type="button" class="card__btn card__btn--archive ${archiveClassName}">
             archive
           </button>
           <button
             type="button"
-            class="card__btn card__btn--favorites ${favoriteButtonInactiveClass}"
+            class="card__btn card__btn--favorites ${favoriteClassName}"
           >
             favorites
           </button>
@@ -50,7 +44,6 @@ const createTaskTemplate = (task) => {
               <div class="card__date-deadline">
                 <p class="card__input-deadline-wrap">
                   <span class="card__date">${date}</span>
-                  <span class="card__time">${time}</span>
                 </p>
               </div>
             </div>
@@ -61,4 +54,25 @@ const createTaskTemplate = (task) => {
   </article>`
   );
 };
-export {createTaskTemplate};
+
+export default class Task {
+  constructor(task) {
+    this._task = task;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTaskTemplate(this._task);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
