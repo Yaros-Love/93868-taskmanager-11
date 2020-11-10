@@ -1,4 +1,3 @@
-import {createTaskTemplate} from './components/task.js';
 import SiteMenuView from './components/site-menu.js';
 import LoadMoreButtonView from './components/load-more_button.js';
 import BoardView from './components/board.js';
@@ -7,6 +6,7 @@ import TaskListView from './components/task-list.js';
 import FilterView from './components/filter.js';
 import TaskView from './components/task.js';
 import TaskEditView from './components/task-edit.js';
+import NoTaskView from './components/no-task.js';
 import {generateFilters} from './moks/filter.js';
 import {generateTasks} from './moks/task.js';
 import {render, RenderPosition} from "./util.js";
@@ -59,8 +59,16 @@ render(siteHeaderElement, new SiteMenuView().getElement(), RenderPosition.BEFORE
 render(siteMainElement, new FilterView(filters).getElement(), RenderPosition.BEFOREEND);
 
 const boardComponent = new BoardView();
+// eslint-disable-next-line no-console
+console.log(boardComponent);
 render(siteMainElement, boardComponent.getElement(), RenderPosition.BEFOREEND);
-render(boardComponent.getElement(), new SortView().getElement(), RenderPosition.AFTERBEGIN);
+
+if (tasks.every((task) => task.isArchive)) {
+  render(boardComponent.getElement(), new NoTaskView().getElement(), RenderPosition.BEFOREEND);
+} else {
+  render(boardComponent.getElement(), new SortView().getElement(), RenderPosition.AFTERBEGIN);
+}
+
 
 const taskListComponent = new TaskListView();
 render(boardComponent.getElement(), taskListComponent.getElement(), RenderPosition.BEFOREEND);
