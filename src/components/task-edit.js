@@ -1,5 +1,6 @@
+import AbstractComponent from './abstract-component.js';
 import {COLORS} from '../const.js';
-import {formatTime, createElement, humanizeTaskDueDate, isTaskRepeating, isTaskExpired} from '../util.js';
+import {humanizeTaskDueDate, isTaskRepeating, isTaskExpired} from '../utils/common.js';
 
 const BLANK_TASK = {
   color: COLORS[0],
@@ -78,12 +79,6 @@ const createTaskEditRepeatingTemplate = (repeating) => {
 const createTaskEditTemplate = (task) => {
   const {description, dueDate, color, repeatingDays} = task;
 
-  // const isExpired = dueDate instanceof Date && dueDate < Date.now();
-
-  // const isDateShowing = !!dueDate;
-  // const date = isDateShowing ? `${dueDate.getDate()} ${MONTH_NAMES[dueDate.getMonth()]} ` : ``;
-  // const time = isDateShowing ? `${formatTime(dueDate)} ` : ``;
-
   const dateTemplate = createTaskEditDateTemplate(dueDate);
   const repeatingTemplate = createTaskEditRepeatingTemplate(repeatingDays);
   const colorsTemplate = createTaskEditColorsTemplate(color);
@@ -136,24 +131,13 @@ const createTaskEditTemplate = (task) => {
   </article>`;
 };
 
-export default class TaskEdit {
+export default class TaskEdit extends AbstractComponent {
   constructor(task) {
+    super();
     this._task = task || BLANK_TASK;
-    this._element = null;
   }
 
   getTemplate() {
     return createTaskEditTemplate(this._task);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
