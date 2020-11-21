@@ -1,6 +1,7 @@
 import SiteMenuComponent from './components/site-menu.js';
 import LoadMoreButtonComponent from './components/load-more_button.js';
 import BoardComponent from './components/board.js';
+import BoardController from './controllers/board.js';
 import SortComponent from './components/sort.js';
 import TaskListComponent from './components/task-list.js';
 import FilterComponent from './components/filter.js';
@@ -17,75 +18,74 @@ const TASK_COUNT_PER_STEP = 8;
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
-const renderTask = (taskListElement, task) => {
-  const taskComponent = new TaskComponent(task);
-  const taskEditComponent = new TaskEditComponent(task);
+// const renderTask = (taskListElement, task) => {
+//   const taskComponent = new TaskComponent(task);
+//   const taskEditComponent = new TaskEditComponent(task);
 
-  const replaceCardToForm = () => {
-    replace(taskEditComponent, taskComponent);
-  };
+//   const replaceCardToForm = () => {
+//     replace(taskEditComponent, taskComponent);
+//   };
 
-  const replaceFormToCard = () => {
-    replace(taskComponent, taskEditComponent);
-  };
+//   const replaceFormToCard = () => {
+//     replace(taskComponent, taskEditComponent);
+//   };
 
-  const onEscKeyDown = (evt) => {
-    if (evt.key === `Escape` || evt.key === `Esc`) {
-      evt.preventDefault();
-      replaceFormToCard();
-      document.removeEventListener(`keydown`, onEscKeyDown);
-    }
-  };
+//   const onEscKeyDown = (evt) => {
+//     if (evt.key === `Escape` || evt.key === `Esc`) {
+//       evt.preventDefault();
+//       replaceFormToCard();
+//       document.removeEventListener(`keydown`, onEscKeyDown);
+//     }
+//   };
 
-  taskComponent.getElement().querySelector(`.card__btn--edit`).addEventListener(`click`, () => {
-    replaceCardToForm();
-    document.addEventListener(`keydown`, onEscKeyDown);
-  });
+//   taskComponent.setEditButtonClickHandler(() => {
+//     replaceCardToForm();
+//     document.addEventListener(`keydown`, onEscKeyDown);
+//   });
 
-  taskEditComponent.getElement().querySelector(`form`).addEventListener(`submit`, (evt) => {
-    evt.preventDefault();
-    replaceFormToCard();
-    document.removeEventListener(`keudown`, onEscKeyDown);
-  });
+//   taskEditComponent.setSubmitHandler((evt) => {
+//     evt.preventDefault();
+//     replaceFormToCard();
+//     document.removeEventListener(`keudown`, onEscKeyDown);
+//   });
 
-  render(taskListElement, taskComponent, RenderPosition.BEFOREEND);
-};
+//   render(taskListElement, taskComponent, RenderPosition.BEFOREEND);
+// };
 
-const renderBoard = (boardComponent, tasks) => {
-  if (tasks.every((task) => task.isArchive)) {
-    render(boardComponent.getElement(), new NoTaskComponent(), RenderPosition.AFTERBEGIN);
-    return;
-  }
+// const renderBoard = (boardComponent, tasks) => {
+//   if (tasks.every((task) => task.isArchive)) {
+//     render(boardComponent.getElement(), new NoTaskComponent(), RenderPosition.AFTERBEGIN);
+//     return;
+//   }
 
-  const taskListComponent = new TaskListComponent();
-  render(boardComponent.getElement(), taskListComponent, RenderPosition.BEFOREEND);
-  render(boardComponent.getElement(), new SortComponent(), RenderPosition.AFTERBEGIN);
+//   const taskListComponent = new TaskListComponent();
+//   render(boardComponent.getElement(), taskListComponent, RenderPosition.BEFOREEND);
+//   render(boardComponent.getElement(), new SortComponent(), RenderPosition.AFTERBEGIN);
 
-  tasks
-    .slice(0, Math.min(tasks.length, TASK_COUNT_PER_STEP))
-    .forEach((task) => renderTask(taskListComponent.getElement(), task));
+//   tasks
+//     .slice(0, Math.min(tasks.length, TASK_COUNT_PER_STEP))
+//     .forEach((task) => renderTask(taskListComponent.getElement(), task));
 
-  if (tasks.length > TASK_COUNT_PER_STEP) {
-    let renderTaskCount = TASK_COUNT_PER_STEP;
+//   if (tasks.length > TASK_COUNT_PER_STEP) {
+//     let renderTaskCount = TASK_COUNT_PER_STEP;
 
-    const loadMoreButtonComponent = new LoadMoreButtonComponent();
+//     const loadMoreButtonComponent = new LoadMoreButtonComponent();
 
-    render(boardComponent.getElement(), loadMoreButtonComponent, RenderPosition.BEFOREEND);
+//     render(boardComponent.getElement(), loadMoreButtonComponent, RenderPosition.BEFOREEND);
 
-    loadMoreButtonComponent.getElement().addEventListener(`click`, (evt) => {
-      evt.preventDefault();
-      tasks
-        .slice(renderTaskCount, renderTaskCount + TASK_COUNT_PER_STEP)
-        .forEach((task) => renderTask(taskListComponent.getElement(), task));
+//     loadMoreButtonComponent.setClickHandler(() => {
+//       tasks
+//         .slice(renderTaskCount, renderTaskCount + TASK_COUNT_PER_STEP)
+//         .forEach((task) => renderTask(taskListComponent.getElement(), task));
 
-      renderTaskCount += TASK_COUNT_PER_STEP;
+//       renderTaskCount += TASK_COUNT_PER_STEP;
 
-      if (renderTaskCount >= tasks.length) {
-        remove(loadMoreButtonComponent);
-      }
-    });
-  }
-};
+//       if (renderTaskCount >= tasks.length) {
+//         remove(loadMoreButtonComponent);
+//       }
+//     });
+//   }
+// };
 
 const filters = generateFilters();
 const tasks = new Array(TASK_COUNT).fill().map(generateTask);
@@ -94,5 +94,7 @@ render(siteHeaderElement, new SiteMenuComponent(), RenderPosition.BEFOREEND);
 render(siteMainElement, new FilterComponent(filters), RenderPosition.BEFOREEND);
 
 const boardComponent = new BoardComponent();
+const boardController = new BoardController(boardComponent);
+
 render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
-renderBoard(boardComponent, tasks);
+boardController.render(tasks);
