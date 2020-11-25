@@ -49,7 +49,7 @@ const renderTasks = (taskListElement, tasks) => {
   });
 };
 
-const getSortedTasks = (tasks, sortType, from ,to) => {
+const getSortedTasks = (tasks, sortType, from, to) => {
   let sortedTasks = [];
   const showingTasks = tasks.slice();
 
