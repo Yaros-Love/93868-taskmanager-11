@@ -132,17 +132,24 @@ const createTaskEditTemplate = (task) => {
 };
 
 export default class TaskEdit extends AbstractComponent {
-  constructor(task) {
+  constructor(task = BLANK_TASK) {
     super();
-    this._task = task || BLANK_TASK;
+    this._task = task;
+
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
   }
 
   getTemplate() {
     return createTaskEditTemplate(this._task);
   }
 
-  setSubmitHandler(handler) {
-    this.getElement().querySelector(`form`)
-    .addEventListener(`submit`, handler);
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._callback.formSubmit();
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().querySelector(`form`).addEventListener(`submit`, this._formSubmitHandler);
   }
 }

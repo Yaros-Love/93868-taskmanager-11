@@ -29,13 +29,12 @@ const renderTask = (taskListElement, task) => {
     }
   };
 
-  taskComponent.setEditButtonClickHandler(() => {
+  taskComponent.setEditClickHandler(() => {
     replaceCardToForm();
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  taskEditComponent.setSubmitHandler((evt) => {
-    evt.preventDefault();
+  taskEditComponent.setFormSubmitHandler(() => {
     replaceFormToCard();
     document.removeEventListener(`keudown`, onEscKeyDown);
   });
