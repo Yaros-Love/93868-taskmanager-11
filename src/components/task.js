@@ -1,5 +1,5 @@
 import AbstractComponent from './abstract-component.js';
-import {humanizeTaskDueDate, isTaskRepeating, isTaskExpired} from '../utils/common.js';
+import {humanizeTaskDueDate, isTaskRepeating, isTaskExpired} from '../utils/task.js';
 
 const createTaskTemplate = (task) => {
   const {description, dueDate, color, repeatingDays, isArchive, isFavorite} = task;

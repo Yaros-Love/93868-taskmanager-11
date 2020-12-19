@@ -1,6 +1,6 @@
 import AbstractComponent from './abstract-component.js';
 import {COLORS} from '../const.js';
-import {humanizeTaskDueDate, isTaskRepeating, isTaskExpired} from '../utils/common.js';
+import {humanizeTaskDueDate, isTaskRepeating, isTaskExpired} from '../utils/task.js';
 
 const BLANK_TASK = {
   color: COLORS[0],
